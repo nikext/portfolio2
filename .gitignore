@@ -17,3 +17,7 @@ dist-ssr
 
 # source material with private contact details (not published)
 CV-ai-focused.pdf
+
+# claude code local settings
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

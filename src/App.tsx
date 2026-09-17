@@ -11,9 +11,7 @@ import { Footer } from './components/Footer'
 import styles from './App.module.css'
 
 // three.js is the bulk of the bundle: load it after the page content is on screen.
-const Background = lazy(() =>
-  import('./scene/Background').then((m) => ({ default: m.Background })),
-)
+const Background = lazy(() => import('./scene/Background').then((m) => ({ default: m.Background })))
 
 export default function App() {
   return (

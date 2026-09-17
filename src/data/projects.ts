@@ -95,8 +95,7 @@ export const projects: Project[] = [
     title: 'Modern Gallery App',
     kind: 'Open source',
     year: '2024',
-    summary:
-      'Image gallery built on React Server Components with Next.js, Drizzle and shadcn/ui.',
+    summary: 'Image gallery built on React Server Components with Next.js, Drizzle and shadcn/ui.',
     details: [
       'Server components and server actions for uploads and listing.',
       'Drizzle ORM schema and migrations, Tailwind CSS styling.',

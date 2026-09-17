@@ -14,7 +14,9 @@ export function HowIWork() {
     <div className={styles.wrap} id="how-i-work">
       <Reveal className={styles.head}>
         <p className="eyebrow">How I work</p>
-        <h3 className={styles.title}>From the people who use it to the infrastructure that runs it.</h3>
+        <h3 className={styles.title}>
+          From the people who use it to the infrastructure that runs it.
+        </h3>
         <p className={styles.lede}>
           Hover or tap a layer. The pulses are requests travelling down the stack and telemetry
           coming back up.
@@ -25,7 +27,12 @@ export function HowIWork() {
         <Reveal className={styles.stageCell}>
           <div className={`card ${styles.stage}`}>
             <Suspense fallback={<div className={styles.fallback} aria-hidden="true" />}>
-              <StackDiagram active={active} pinned={pinned} onActive={setActive} onPin={setPinned} />
+              <StackDiagram
+                active={active}
+                pinned={pinned}
+                onActive={setActive}
+                onPin={setPinned}
+              />
             </Suspense>
           </div>
         </Reveal>

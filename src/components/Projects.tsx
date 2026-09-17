@@ -8,19 +8,25 @@ import styles from './Projects.module.css'
 function Arrow() {
   return (
     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-hidden="true">
-      <path d="M4 12L12 4M6 4h6v6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M4 12L12 4M6 4h6v6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
 
 function ProjectCard({ p }: { p: Project }) {
-  const tilt = useTilt<HTMLElement>(5)
+  const { ref, onPointerMove, onPointerLeave } = useTilt<HTMLElement>(5)
   return (
     <article
-      ref={tilt.ref}
+      ref={ref}
       className={`card ${styles.card}`}
-      onPointerMove={tilt.onPointerMove}
-      onPointerLeave={tilt.onPointerLeave}
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
     >
       <div className={styles.top}>
         <span className={styles.kind}>{p.kind}</span>

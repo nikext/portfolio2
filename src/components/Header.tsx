@@ -84,7 +84,11 @@ export function Header() {
           <span className={`${styles.bars} ${open ? styles.barsOpen : ''}`} aria-hidden="true" />
         </button>
 
-        <nav id="site-nav" className={`${styles.nav} ${open ? styles.open : ''}`} aria-label="Sections">
+        <nav
+          id="site-nav"
+          className={`${styles.nav} ${open ? styles.open : ''}`}
+          aria-label="Sections"
+        >
           {NAV.map((n) => (
             <a
               key={n.id}

@@ -8,14 +8,25 @@ function Check() {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
       <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeOpacity="0.5" />
-      <path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M6 10.5l2.5 2.5L14 7.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
 
 export function About() {
   return (
-    <Section id="about" index="01" label="About" title="Close to the business, all the way to production.">
+    <Section
+      id="about"
+      index="01"
+      label="About"
+      title="Close to the business, all the way to production."
+    >
       <div className={styles.grid}>
         <Reveal className={styles.text}>
           {profile.intro.map((p) => (
@@ -50,9 +61,7 @@ export function About() {
               </div>
               <div>
                 <dt>Languages</dt>
-                <dd>
-                  {profile.languages.map((l) => `${l.name} (${l.code})`).join(' · ')}
-                </dd>
+                <dd>{profile.languages.map((l) => `${l.name} (${l.code})`).join(' · ')}</dd>
               </div>
             </dl>
           </aside>

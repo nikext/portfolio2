@@ -32,6 +32,9 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
   const group = useRef<THREE.Group>(null)
   const wire = useRef<THREE.Mesh>(null)
   const ring = useRef<THREE.Mesh>(null)
+  const nodeMat = useRef<THREE.ShaderMaterial>(null)
+  const edgeMat = useRef<THREE.ShaderMaterial>(null)
+  const coreMat = useRef<THREE.ShaderMaterial>(null)
   const wireMat = useRef<THREE.MeshBasicMaterial>(null)
   const ringMat = useRef<THREE.MeshBasicMaterial>(null)
   const mouse = useRef({ x: 0, y: 0 })
@@ -39,59 +42,6 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
   const opacity = useRef(1)
 
   const { nodeGeo, edgeGeo } = useMemo(() => buildGraph(count, k), [count, k])
-
-  const nodeMat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        ...nodeShader,
-        uniforms: {
-          uTime: { value: 0 },
-          uPixelRatio: { value: 1 },
-          uOpacity: { value: 1 },
-          uAssemble: { value: animate ? 0 : 1 },
-          uColorA: { value: new THREE.Color(ACCENT) },
-          uColorB: { value: new THREE.Color(DEEP) },
-        },
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  const edgeMat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        ...edgeShader,
-        uniforms: {
-          uTime: { value: 0 },
-          uOpacity: { value: 1 },
-          uAssemble: { value: animate ? 0 : 1 },
-          uColor: { value: new THREE.Color(ACCENT) },
-        },
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  const coreMat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        ...coreShader,
-        uniforms: {
-          uTime: { value: 0 },
-          uOpacity: { value: 1 },
-          uColor: { value: new THREE.Color(VIOLET) },
-        },
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      }),
-    [],
-  )
-
   useEffect(
     () => () => {
       nodeGeo.dispose()
@@ -99,18 +49,43 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
     },
     [nodeGeo, edgeGeo],
   )
-  useEffect(
-    () => () => {
-      nodeMat.dispose()
-      edgeMat.dispose()
-      coreMat.dispose()
-    },
-    [nodeMat, edgeMat, coreMat],
+
+  // Uniform objects are created once; the frame loop updates their values through the material refs.
+  const nodeUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uPixelRatio: { value: 1 },
+      uOpacity: { value: 1 },
+      uAssemble: { value: animate ? 0 : 1 },
+      uColorA: { value: new THREE.Color(ACCENT) },
+      uColorB: { value: new THREE.Color(DEEP) },
+    }),
+    [animate],
+  )
+  const edgeUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uOpacity: { value: 1 },
+      uAssemble: { value: animate ? 0 : 1 },
+      uColor: { value: new THREE.Color(ACCENT) },
+    }),
+    [animate],
+  )
+  const coreUniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uOpacity: { value: 1 },
+      uColor: { value: new THREE.Color(VIOLET) },
+    }),
+    [],
   )
 
   useFrame((state, delta) => {
     const g = group.current
-    if (!g) return
+    const nm = nodeMat.current
+    const em = edgeMat.current
+    const cm = coreMat.current
+    if (!g || !nm || !em || !cm) return
     const t = state.clock.elapsedTime
     const dt = Math.min(delta, 0.1)
     const isMobile = view.mobile
@@ -151,15 +126,15 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
     g.rotation.y = t * 0.05 + view.scroll * 2.4 + mouse.current.x * 0.28
     g.rotation.x = -mouse.current.y * 0.18 + view.scroll * 0.6
 
-    nodeMat.uniforms.uTime.value = t
-    nodeMat.uniforms.uOpacity.value = opacity.current
-    nodeMat.uniforms.uAssemble.value = assemble.current
-    nodeMat.uniforms.uPixelRatio.value = state.viewport.dpr
-    edgeMat.uniforms.uTime.value = t
-    edgeMat.uniforms.uOpacity.value = opacity.current
-    edgeMat.uniforms.uAssemble.value = assemble.current
-    coreMat.uniforms.uTime.value = t
-    coreMat.uniforms.uOpacity.value = o
+    nm.uniforms.uTime.value = t
+    nm.uniforms.uOpacity.value = opacity.current
+    nm.uniforms.uAssemble.value = assemble.current
+    nm.uniforms.uPixelRatio.value = state.viewport.dpr
+    em.uniforms.uTime.value = t
+    em.uniforms.uOpacity.value = opacity.current
+    em.uniforms.uAssemble.value = assemble.current
+    cm.uniforms.uTime.value = t
+    cm.uniforms.uOpacity.value = o
     if (wireMat.current) wireMat.current.opacity = WIRE_OPACITY * o
     if (ringMat.current) ringMat.current.opacity = RING_OPACITY * o
 
@@ -172,10 +147,39 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
 
   return (
     <group ref={group} position={[mobile ? 0 : 2.2, mobile ? 1.5 : 0, 0]} scale={mobile ? 0.6 : 1}>
-      <points geometry={nodeGeo} material={nodeMat} frustumCulled={false} />
-      <lineSegments geometry={edgeGeo} material={edgeMat} frustumCulled={false} />
-      <mesh material={coreMat}>
+      <points geometry={nodeGeo} frustumCulled={false}>
+        <shaderMaterial
+          ref={nodeMat}
+          vertexShader={nodeShader.vertexShader}
+          fragmentShader={nodeShader.fragmentShader}
+          uniforms={nodeUniforms}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </points>
+      <lineSegments geometry={edgeGeo} frustumCulled={false}>
+        <shaderMaterial
+          ref={edgeMat}
+          vertexShader={edgeShader.vertexShader}
+          fragmentShader={edgeShader.fragmentShader}
+          uniforms={edgeUniforms}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </lineSegments>
+      <mesh>
         <sphereGeometry args={[0.9, 48, 48]} />
+        <shaderMaterial
+          ref={coreMat}
+          vertexShader={coreShader.vertexShader}
+          fragmentShader={coreShader.fragmentShader}
+          uniforms={coreUniforms}
+          transparent
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
       </mesh>
       <mesh ref={wire}>
         <icosahedronGeometry args={[1.25, 1]} />

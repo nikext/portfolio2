@@ -24,22 +24,18 @@ function supportsWebGL(): boolean {
  */
 export function Background() {
   const reduced = useReducedMotion()
-  const [enabled, setEnabled] = useState(false)
+  const [enabled] = useState(() => supportsWebGL())
   const [mobile, setMobile] = useState(() => window.matchMedia(MOBILE_QUERY).matches)
 
   useEffect(() => {
-    setEnabled(supportsWebGL())
-  }, [])
-
-  useEffect(() => {
     const mq = window.matchMedia(MOBILE_QUERY)
-    const apply = () => {
+    view.mobile = mq.matches
+    const onChange = () => {
       setMobile(mq.matches)
       view.mobile = mq.matches
     }
-    apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
   }, [])
 
   useEffect(() => {
@@ -74,18 +70,28 @@ export function Background() {
 
   return (
     <div className={styles.canvas} aria-hidden="true">
-          <ErrorBoundary>
-            <Canvas
-              flat
-              dpr={[1, mobile ? 1.25 : 1.5]}
-              frameloop={reduced ? 'demand' : 'always'}
-              camera={{ fov: 42, near: 0.1, far: 60, position: [0, 0, 7] }}
-              gl={{ antialias: false, alpha: true, powerPreference: 'high-performance', stencil: false }}
-              onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
-            >
-              <Starfield count={mobile ? 260 : 520} />
-              <NeuralSphere count={mobile ? 150 : 240} k={mobile ? 2 : 3} mobile={mobile} animate={!reduced} />
-      </Canvas>
+      <ErrorBoundary>
+        <Canvas
+          flat
+          dpr={[1, mobile ? 1.25 : 1.5]}
+          frameloop={reduced ? 'demand' : 'always'}
+          camera={{ fov: 42, near: 0.1, far: 60, position: [0, 0, 7] }}
+          gl={{
+            antialias: false,
+            alpha: true,
+            powerPreference: 'high-performance',
+            stencil: false,
+          }}
+          onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
+        >
+          <Starfield count={mobile ? 260 : 520} />
+          <NeuralSphere
+            count={mobile ? 150 : 240}
+            k={mobile ? 2 : 3}
+            mobile={mobile}
+            animate={!reduced}
+          />
+        </Canvas>
       </ErrorBoundary>
     </div>
   )

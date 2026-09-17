@@ -49,7 +49,12 @@ function Slab({ layer, index, active, dimmed, onOver, onOut, onClick }: SlabProp
       mesh.current.position.y = damp(mesh.current.position.y, y0 + (active ? 0.18 : 0), 8, dt)
     }
     if (mat.current) {
-      mat.current.emissiveIntensity = damp(mat.current.emissiveIntensity, active ? 0.5 : 0.05, 8, dt)
+      mat.current.emissiveIntensity = damp(
+        mat.current.emissiveIntensity,
+        active ? 0.5 : 0.05,
+        8,
+        dt,
+      )
       mat.current.opacity = damp(mat.current.opacity, dimmed ? 0.5 : 0.85, 8, dt)
     }
     if (edge.current) {
@@ -90,7 +95,11 @@ function Slab({ layer, index, active, dimmed, onOver, onOut, onClick }: SlabProp
       <lineSegments geometry={edges}>
         <lineBasicMaterial ref={edge} color={ACCENT} transparent opacity={0.7} />
       </lineSegments>
-      <Html position={[SLAB.w / 2 + 0.2, 0, 0]} zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
+      <Html
+        position={[SLAB.w / 2 + 0.2, 0, 0]}
+        zIndexRange={[5, 0]}
+        style={{ pointerEvents: 'none' }}
+      >
         <span className={`${styles.label} ${active ? styles.labelOn : ''}`}>
           <b>{layer.index}</b>
           <span className={styles.labelText}>{layer.title}</span>
@@ -102,6 +111,8 @@ function Slab({ layer, index, active, dimmed, onOver, onOut, onClick }: SlabProp
 
 /** Small glowing points travelling down (requests) and back up (telemetry) through the layers. */
 function Pulses({ count, animate }: { count: number; animate: boolean }) {
+  const mat = useRef<THREE.ShaderMaterial>(null)
+
   const { geo, seeds } = useMemo(() => {
     const rand = mulberry32(21)
     const pos = new Float32Array(count * 3)
@@ -124,29 +135,21 @@ function Pulses({ count, animate }: { count: number; animate: boolean }) {
     g.setAttribute('aPhase', new THREE.BufferAttribute(phase, 1))
     return { geo: g, seeds }
   }, [count])
+  useEffect(() => () => geo.dispose(), [geo])
 
-  const mat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        ...starShader,
-        uniforms: {
-          uTime: { value: 0 },
-          uPixelRatio: { value: 1 },
-          uOpacity: { value: 0.95 },
-          uColor: { value: new THREE.Color(ACCENT) },
-        },
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-      }),
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uPixelRatio: { value: 1 },
+      uOpacity: { value: 0.95 },
+      uColor: { value: new THREE.Color(ACCENT) },
+    }),
     [],
   )
 
-  useEffect(() => () => geo.dispose(), [geo])
-  useEffect(() => () => mat.dispose(), [mat])
-
   useFrame((state) => {
-    if (!animate) return
+    const m = mat.current
+    if (!animate || !m) return
     const t = state.clock.elapsedTime
     const attr = geo.getAttribute('position') as THREE.BufferAttribute
     const span = (layers.length - 1) * GAP
@@ -157,12 +160,24 @@ function Pulses({ count, animate }: { count: number; animate: boolean }) {
       attr.setXYZ(i, s.x, y, s.z)
     }
     attr.needsUpdate = true
-    mat.uniforms.uTime.value = t
-    mat.uniforms.uPixelRatio.value = state.viewport.dpr
+    m.uniforms.uTime.value = t
+    m.uniforms.uPixelRatio.value = state.viewport.dpr
   })
 
   // Drawn after the (transparent) slabs so the depth test hides only the pulses that are really inside one.
-  return <points geometry={geo} material={mat} frustumCulled={false} renderOrder={2} />
+  return (
+    <points geometry={geo} frustumCulled={false} renderOrder={2}>
+      <shaderMaterial
+        ref={mat}
+        vertexShader={starShader.vertexShader}
+        fragmentShader={starShader.fragmentShader}
+        uniforms={uniforms}
+        transparent
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </points>
+  )
 }
 
 /** Isometric-ish tilt that follows the pointer and breathes slowly. */
