@@ -7,12 +7,12 @@ const stagger = (i: number) => ({ '--i': i }) as CSSProperties
 export function Hero() {
   return (
     <section className={styles.hero} id="top" aria-label="Introduction">
-      <div className="container">
+      <div className={`container ${styles.inner}`}>
         <div className={styles.grid}>
           <div className={styles.copy}>
             <p className={`eyebrow ${styles.eyebrow}`} style={stagger(0)}>
               <span className={styles.dot} aria-hidden="true" />
-              {profile.name} · {profile.role}
+              {profile.name} · {profile.location}
             </p>
             <h1 className={styles.title} style={stagger(1)}>
               AI applications that <span className={styles.accent}>ship</span>.

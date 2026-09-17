@@ -6,12 +6,18 @@ export const nodeShader = {
   vertexShader: /* glsl */ `
     uniform float uTime;
     uniform float uPixelRatio;
+    uniform float uAssemble;
     attribute float aSize;
     attribute float aPhase;
+    attribute vec3 aStart;
     varying float vPulse;
 
     void main() {
-      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      // each node eases in on its own schedule so the sphere assembles organically
+      float local = clamp(uAssemble * 1.35 - aPhase * 0.35, 0.0, 1.0);
+      float ease = 1.0 - pow(1.0 - local, 3.0);
+      vec3 p = mix(aStart, position, ease);
+      vec4 mv = modelViewMatrix * vec4(p, 1.0);
       float pulse = 0.5 + 0.5 * sin(uTime * 1.4 + aPhase * 6.28318);
       vPulse = pulse;
       gl_PointSize = aSize * uPixelRatio * (30.0 + 14.0 * pulse) / max(-mv.z, 0.1);
@@ -39,6 +45,9 @@ export const nodeShader = {
 
 export const edgeShader = {
   vertexShader: /* glsl */ `
+    uniform float uAssemble;
+    attribute vec3 aStart;
+    attribute float aNodePhase;
     attribute float aT;
     attribute float aPhase;
     attribute float aSpeed;
@@ -49,15 +58,20 @@ export const edgeShader = {
     varying float vActive;
 
     void main() {
+      // must match the node easing exactly so edges stay attached while assembling
+      float local = clamp(uAssemble * 1.35 - aNodePhase * 0.35, 0.0, 1.0);
+      float ease = 1.0 - pow(1.0 - local, 3.0);
+      vec3 p = mix(aStart, position, ease);
       vT = aT;
       vPhase = aPhase;
       vSpeed = aSpeed;
       vActive = aActive;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
     }
   `,
   fragmentShader: /* glsl */ `
     uniform float uTime;
+    uniform float uAssemble;
     uniform vec3 uColor;
     uniform float uOpacity;
     varying float vT;
@@ -69,7 +83,7 @@ export const edgeShader = {
       // a short bright pulse travelling from one end of the edge to the other
       float p = fract(uTime * vSpeed + vPhase);
       float pulse = smoothstep(0.14, 0.0, abs(vT - p)) * vActive;
-      float a = (0.09 + pulse * 0.85) * uOpacity;
+      float a = (0.09 + pulse * 0.85) * uOpacity * smoothstep(0.55, 1.0, uAssemble);
       gl_FragColor = vec4(uColor + pulse * 0.5, a);
     }
   `,

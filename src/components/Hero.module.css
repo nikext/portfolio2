@@ -7,6 +7,10 @@
   padding-bottom: 72px;
 }
 
+.inner {
+  position: relative;
+}
+
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
@@ -119,9 +123,8 @@
 
 .scrollCue {
   position: absolute;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
+  left: 0;
+  bottom: -52px;
   display: inline-flex;
   flex-direction: column;
   align-items: center;

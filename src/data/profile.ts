@@ -22,7 +22,7 @@ export const profile = {
     { value: '5+', label: 'years shipping production software' },
     { value: '99.9%', label: 'uptime sustained on fintech applications' },
     { value: '3', label: 'Google Cloud and Google AI certifications' },
-    { value: '4', label: 'companies across banking, staffing, AI and telecom' },
+    { value: '20%', label: 'lift in user engagement from redesigned pages' },
   ],
   strengths: [
     'Clear communication with technical and non-technical stakeholders',

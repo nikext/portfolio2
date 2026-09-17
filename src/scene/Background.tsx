@@ -84,7 +84,7 @@ export function Background() {
               onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
             >
               <Starfield count={mobile ? 260 : 520} />
-              <NeuralSphere count={mobile ? 150 : 240} k={mobile ? 2 : 3} mobile={mobile} />
+              <NeuralSphere count={mobile ? 150 : 240} k={mobile ? 2 : 3} mobile={mobile} animate={!reduced} />
       </Canvas>
       </ErrorBoundary>
     </div>
