@@ -16,7 +16,7 @@ const ACCENT = '#67e8f9'
 const SLAB = { w: 2.7, h: 0.16, d: 1.8 }
 const GAP = 0.82
 const TOP = ((layers.length - 1) * GAP) / 2
-const { damp } = THREE.MathUtils
+const { damp, clamp } = THREE.MathUtils
 
 interface SlabProps {
   layer: Layer
@@ -160,7 +160,8 @@ function Pulses({ count, animate }: { count: number; animate: boolean }) {
     mat.uniforms.uPixelRatio.value = state.viewport.dpr
   })
 
-  return <points geometry={geo} material={mat} frustumCulled={false} />
+  // Drawn after the (transparent) slabs so the depth test hides only the pulses that are really inside one.
+  return <points geometry={geo} material={mat} frustumCulled={false} renderOrder={2} />
 }
 
 /** Isometric-ish tilt that follows the pointer and breathes slowly. */
@@ -170,6 +171,10 @@ function Rig({ animate, children }: { animate: boolean; children: ReactNode }) {
     const r = g.current
     if (!r) return
     const t = state.clock.elapsedTime
+    // Narrow canvases: shrink and shift left so the labels on the right stay inside the card.
+    const fit = clamp(state.viewport.aspect / 1.55, 0.78, 1)
+    r.scale.setScalar(damp(r.scale.x, fit, 6, delta))
+    r.position.x = damp(r.position.x, -0.45 - (1 - fit) * 2.4, 6, delta)
     const ty = -0.6 + state.pointer.x * 0.22 + (animate ? Math.sin(t * 0.35) * 0.1 : 0)
     const tx = 0.52 - state.pointer.y * 0.1
     r.rotation.y = damp(r.rotation.y, ty, 3, delta)
