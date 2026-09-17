@@ -24,6 +24,14 @@
   padding: 26px;
 }
 
+.portrait {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 22px;
+}
+
 .aside h3 {
   font-family: var(--font-mono);
   font-weight: 500;

@@ -29,6 +29,11 @@ export function Hero() {
               <a className="btn btn-ghost" href="#contact">
                 Get in touch
               </a>
+              {__HAS_CV__ && (
+                <a className="btn btn-ghost" href="/cv.pdf" download>
+                  Download CV
+                </a>
+              )}
             </div>
             <dl className={styles.facts} style={stagger(4)}>
               {profile.facts.map((f) => (

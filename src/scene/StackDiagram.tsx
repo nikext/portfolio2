@@ -14,7 +14,7 @@ import styles from './StackDiagram.module.css'
 
 const ACCENT = '#67e8f9'
 const SLAB = { w: 2.7, h: 0.16, d: 1.8 }
-const GAP = 0.82
+const GAP = 0.95
 const TOP = ((layers.length - 1) * GAP) / 2
 const { damp, clamp } = THREE.MathUtils
 
@@ -50,7 +50,7 @@ function Slab({ layer, index, active, dimmed, onOver, onOut, onClick }: SlabProp
     }
     if (mat.current) {
       mat.current.emissiveIntensity = damp(mat.current.emissiveIntensity, active ? 0.5 : 0.05, 8, dt)
-      mat.current.opacity = damp(mat.current.opacity, dimmed ? 0.55 : 0.92, 8, dt)
+      mat.current.opacity = damp(mat.current.opacity, dimmed ? 0.5 : 0.85, 8, dt)
     }
     if (edge.current) {
       edge.current.opacity = damp(edge.current.opacity, active ? 1 : dimmed ? 0.3 : 0.7, 8, dt)
@@ -84,7 +84,8 @@ function Slab({ layer, index, active, dimmed, onOver, onOut, onClick }: SlabProp
         metalness={0.2}
         roughness={0.5}
         transparent
-        opacity={0.92}
+        opacity={0.85}
+        depthWrite={false}
       />
       <lineSegments geometry={edges}>
         <lineBasicMaterial ref={edge} color={ACCENT} transparent opacity={0.7} />

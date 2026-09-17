@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -17,4 +18,9 @@ function siteUrl(): Plugin {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), siteUrl()],
+  define: {
+    // Optional assets: drop the files into public/ and rebuild; the UI switches on by itself.
+    __HAS_PORTRAIT__: JSON.stringify(existsSync('public/portrait.jpg')),
+    __HAS_CV__: JSON.stringify(existsSync('public/cv.pdf')),
+  },
 })

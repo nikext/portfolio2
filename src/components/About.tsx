@@ -24,6 +24,16 @@ export function About() {
         </Reveal>
         <Reveal delay={120}>
           <aside className={`card ${styles.aside}`}>
+            {__HAS_PORTRAIT__ && (
+              <img
+                className={styles.portrait}
+                src="/portrait.jpg"
+                alt={`Portrait of ${profile.name}`}
+                width={640}
+                height={800}
+                loading="lazy"
+              />
+            )}
             <h3>At a glance</h3>
             <dl>
               <div>

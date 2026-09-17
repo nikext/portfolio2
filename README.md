@@ -45,6 +45,10 @@ Connect the repo in the Cloudflare dashboard (Workers & Pages → Create → Pag
 
 Every push to `main` deploys; other branches get preview URLs. `public/_headers` adds security and cache headers.
 
+## Optional portrait and CV
+
+Drop `public/portrait.jpg` (4:5 works best) and/or `public/cv.pdf` (a public-safe version without private contact details) into the repo and rebuild. The build detects the files (`vite.config.ts` → `__HAS_PORTRAIT__`, `__HAS_CV__`) and shows the portrait in About and "Download CV" buttons in the hero and contact sections.
+
 ## Open Graph image
 
 `scripts/og.html` is the 1200×630 template behind `public/og.png`. To re-render it after editing:

@@ -32,6 +32,11 @@ export function Contact() {
               <a className="btn btn-ghost" href={profile.links.credly} target="_blank" rel="noreferrer">
                 Credly
               </a>
+              {__HAS_CV__ && (
+                <a className="btn btn-ghost" href="/cv.pdf" download>
+                  Download CV
+                </a>
+              )}
             </div>
             <p className={styles.meta}>
               <span>{profile.location}</span>
