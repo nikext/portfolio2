@@ -123,7 +123,7 @@
 
 .scrollCue {
   position: absolute;
-  left: 0;
+  right: 0;
   bottom: -52px;
   display: inline-flex;
   flex-direction: column;

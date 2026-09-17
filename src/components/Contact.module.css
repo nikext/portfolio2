@@ -2,6 +2,10 @@
   position: relative;
   overflow: hidden;
   padding: clamp(28px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 24px;
+  align-items: center;
 }
 
 .wrap::before {
@@ -12,15 +16,22 @@
   background: radial-gradient(closest-side, rgba(103, 232, 249, 0.1), transparent 70%);
 }
 
-.lede {
+.main {
   position: relative;
+  min-width: 0;
+}
+
+.mark {
+  position: relative;
+}
+
+.lede {
   color: var(--text-2);
   font-size: 1.12rem;
   max-width: 58ch;
 }
 
 .actions {
-  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -28,7 +39,6 @@
 }
 
 .meta {
-  position: relative;
   margin-top: 28px;
   display: flex;
   flex-wrap: wrap;
@@ -36,4 +46,10 @@
   font-family: var(--font-mono);
   font-size: 12.5px;
   color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .wrap {
+    grid-template-columns: 1fr;
+  }
 }

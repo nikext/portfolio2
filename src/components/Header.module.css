@@ -20,6 +20,13 @@
   border-bottom-color: var(--line);
 }
 
+/* With the phone menu open the header and panel go fully opaque so nothing bleeds through. */
+.menuOpen {
+  background: #0a0d16;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 .inner {
   display: flex;
   align-items: center;
@@ -176,7 +183,7 @@
     align-items: stretch;
     gap: 4px;
     padding: 12px var(--gutter) 20px;
-    background: rgba(7, 9, 15, 0.96);
+    background: #0a0d16;
     border-bottom: 1px solid var(--line);
   }
 

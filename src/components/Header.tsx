@@ -48,7 +48,9 @@ export function Header() {
   }, [open])
 
   return (
-    <header className={`${styles.header} ${scrolled || open ? styles.scrolled : ''}`}>
+    <header
+      className={`${styles.header} ${scrolled || open ? styles.scrolled : ''} ${open ? styles.menuOpen : ''}`}
+    >
       <div className={`container ${styles.inner}`}>
         <a className={styles.brand} href="#top" aria-label="Nikola Todorovski, back to top">
           <span className={styles.mark} aria-hidden="true">

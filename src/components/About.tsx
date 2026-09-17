@@ -1,4 +1,5 @@
 import { profile } from '../data/profile'
+import { HowIWork } from './HowIWork'
 import { Reveal } from './Reveal'
 import { Section } from './Section'
 import styles from './About.module.css'
@@ -47,6 +48,7 @@ export function About() {
           </aside>
         </Reveal>
       </div>
+      <HowIWork />
       <Reveal delay={80}>
         <ul className={styles.strengths} aria-label="Strengths">
           {profile.strengths.map((s) => (
