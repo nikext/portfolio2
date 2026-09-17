@@ -1,0 +1,86 @@
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.text {
+  display: grid;
+  gap: 18px;
+  font-size: 1.08rem;
+  color: var(--text-2);
+  max-width: 64ch;
+}
+
+.text p:first-child {
+  color: var(--text);
+  font-size: 1.25rem;
+  font-family: var(--font-display);
+  line-height: 1.45;
+}
+
+.aside {
+  padding: 26px;
+}
+
+.aside h3 {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+.aside dl {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.aside dt {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.aside dd {
+  margin: 4px 0 0;
+  color: var(--text);
+}
+
+.strengths {
+  list-style: none;
+  margin: clamp(36px, 5vw, 56px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0 32px;
+}
+
+.strengths li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  color: var(--text-2);
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.strengths svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  color: var(--accent);
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

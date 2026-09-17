@@ -1,0 +1,32 @@
+.page {
+  position: relative;
+  z-index: 2;
+}
+
+.glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(1100px 700px at 78% 0%, rgba(103, 232, 249, 0.1), transparent 62%),
+    radial-gradient(900px 600px at 6% 100%, rgba(167, 139, 250, 0.1), transparent 60%);
+}
+
+.skip {
+  position: absolute;
+  left: 16px;
+  top: -80px;
+  z-index: 50;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip:focus {
+  top: 16px;
+}

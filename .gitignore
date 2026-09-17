@@ -1,0 +1,19 @@
+# dependencies / build
+node_modules
+dist
+dist-ssr
+.wrangler
+*.local
+
+# env
+.env
+.env.*
+
+# editor / os
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# source material with private contact details (not published)
+CV-ai-focused.pdf
