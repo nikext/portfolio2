@@ -67,7 +67,7 @@ export function Projects() {
       index="03"
       label="Projects"
       title="Work I can point to."
-      lede="Client and workplace case studies, plus open-source projects that show how I build."
+      lede="Client and workplace case studies, shipped iOS apps and open-source projects that show how I build."
     >
       <div className={styles.grid}>
         {projects.map((p, i) => (

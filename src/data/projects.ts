@@ -1,7 +1,7 @@
 export interface Project {
   id: string
   title: string
-  kind: 'Client work' | 'At work' | 'Open source' | 'University'
+  kind: 'Client work' | 'At work' | 'iOS app' | 'Open source' | 'University'
   year: string
   summary: string
   details: string[]
@@ -61,6 +61,37 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: 'charmiq',
+    title: 'CharmIQ',
+    kind: 'iOS app',
+    year: '2026',
+    summary:
+      'Speech coaching for iPhone: analyses how you talk, scores delivery on device or in the cloud, and lets you practise with a live AI partner.',
+    details: [
+      'Swift 6, SwiftUI, MVVM with @Observable and structured concurrency; modular SPM packages, iOS 18 minimum with iOS 26 paths.',
+      'On-device pipeline: AVAudioEngine, SpeechAnalyzer with iOS 18 fallback, AudioKit pitch, vDSP rules for vocal fry and uptalk.',
+      'Apple Foundation Models on device or Gemini in the cloud for scoring; ElevenLabs and OpenAI Realtime for the live partner. Supabase, RevenueCat, Superwall, PostHog.',
+    ],
+    stack: ['Swift 6', 'SwiftUI', 'Foundation Models', 'Supabase', 'RevenueCat'],
+    links: [{ label: 'Website', url: 'https://charmiq.app' }],
+    featured: true,
+  },
+  {
+    id: 'pollenly',
+    title: 'Pollenly',
+    kind: 'iOS app',
+    year: '2026',
+    summary:
+      'Pollen forecast app for iPhone with a home-screen widget, so allergy sufferers can check today’s levels at a glance.',
+    details: [
+      'Swift and SwiftUI on the Google Pollen API for per-type pollen levels and forecasts.',
+      'Custom iOS widget built with WidgetKit that keeps the forecast on the home screen.',
+      'Supabase backend and RevenueCat subscriptions.',
+    ],
+    stack: ['Swift', 'SwiftUI', 'WidgetKit', 'Google Pollen API', 'Supabase', 'RevenueCat'],
+    links: [{ label: 'Website', url: 'https://pollenly.app' }],
+  },
+  {
     id: 'ai-content',
     title: 'AI Content Generation Platform',
     kind: 'University',
@@ -74,36 +105,5 @@ export const projects: Project[] = [
     ],
     stack: ['Next.js', 'Prisma', 'Stripe', 'OpenAI API', 'Replicate'],
     links: [{ label: 'Code', url: 'https://github.com/nikext/AI-Content-Generation-Platform' }],
-  },
-  {
-    id: 'boilerplate',
-    title: 'Full-stack TypeScript boilerplate',
-    kind: 'Open source',
-    year: '2025',
-    summary:
-      'Production-ready monorepo starter: Next.js app, Express API, shared Zod schemas, Prisma on PostgreSQL, shadcn/ui and Docker Compose.',
-    details: [
-      'Turborepo workspace with shared types and schemas across frontend and backend.',
-      'End-to-end type safety with TypeScript and Zod validation.',
-      'Set up for AI-assisted development in Cursor.',
-    ],
-    stack: ['Turborepo', 'Next.js', 'Express', 'Prisma', 'Zod'],
-    links: [{ label: 'Code', url: 'https://github.com/nikext/boilerplate' }],
-  },
-  {
-    id: 'gallery',
-    title: 'Modern Gallery App',
-    kind: 'Open source',
-    year: '2024',
-    summary: 'Image gallery built on React Server Components with Next.js, Drizzle and shadcn/ui.',
-    details: [
-      'Server components and server actions for uploads and listing.',
-      'Drizzle ORM schema and migrations, Tailwind CSS styling.',
-    ],
-    stack: ['Next.js', 'React Server Components', 'Drizzle', 'Tailwind CSS'],
-    links: [
-      { label: 'Live', url: 'https://gallery-delta-pearl.vercel.app' },
-      { label: 'Code', url: 'https://github.com/nikext/gallery' },
-    ],
   },
 ]
