@@ -40,7 +40,11 @@
   width: 100%;
   aspect-ratio: 4 / 3.1;
   border-radius: 12px;
-  background: radial-gradient(circle at 50% 45%, rgba(103, 232, 249, 0.08), transparent 60%);
+  background: radial-gradient(
+    circle at 50% 45%,
+    color-mix(in srgb, var(--accent) 8%, transparent),
+    transparent 60%
+  );
 }
 
 .list {
@@ -71,8 +75,8 @@
 
 .layer:hover,
 .on {
-  border-color: rgba(103, 232, 249, 0.45);
-  background: rgba(103, 232, 249, 0.06);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .on {

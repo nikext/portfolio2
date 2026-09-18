@@ -10,11 +10,15 @@
   --text: #e9edf5;
   --text-2: #b9c1cf;
   --muted: #8a93a5;
-  --accent: #67e8f9;
-  --accent-strong: #22d3ee;
-  --accent-ink: #052730;
-  --accent-soft: rgba(103, 232, 249, 0.12);
-  --violet: #a78bfa;
+  /* Accent: champagne gold on blue-black, with a cool blue glow in the sphere core.
+     The three.js layer reads these through src/scene/palette.ts; never hardcode them. */
+  --accent: #e8d5a6;
+  --accent-strong: #d9bf7d;
+  --accent-bright: #f3e7c8;
+  --accent-tint: #fbf5e6;
+  --accent-ink: #221a08;
+  --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
+  --glow: #7c93e8;
   --ok: #86efac;
 
   /* type */
@@ -96,7 +100,7 @@ button {
 }
 
 ::selection {
-  background: rgba(103, 232, 249, 0.3);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 /* layout helpers */
@@ -165,7 +169,7 @@ button {
 }
 
 .btn-primary:hover {
-  background: #a5f3fc;
+  background: var(--accent-bright);
   transform: translateY(-1px);
 }
 

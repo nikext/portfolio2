@@ -25,16 +25,16 @@ const nodes = [
 
 const nodeMat = new THREE.MeshStandardMaterial({
   name: 'node',
-  color: 0xe0f7ff,
-  emissive: 0x67e8f9,
+  color: 0xfbf5e6,
+  emissive: 0xe8d5a6,
   emissiveIntensity: 0.55,
   metalness: 0.25,
   roughness: 0.3,
 })
 const edgeMat = new THREE.MeshStandardMaterial({
   name: 'edge',
-  color: 0x67e8f9,
-  emissive: 0x22d3ee,
+  color: 0xe8d5a6,
+  emissive: 0xd9bf7d,
   emissiveIntensity: 0.35,
   metalness: 0.4,
   roughness: 0.35,

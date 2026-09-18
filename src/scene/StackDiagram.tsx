@@ -10,9 +10,10 @@ import { mulberry32 } from './random'
 import { starShader } from './shaders'
 import { useInView } from '../lib/useInView'
 import { useReducedMotion } from '../lib/useReducedMotion'
+import { cssColor } from './palette'
 import styles from './StackDiagram.module.css'
 
-const ACCENT = '#67e8f9'
+const ACCENT = cssColor('--accent')
 const SLAB = { w: 2.7, h: 0.16, d: 1.8 }
 const GAP = 0.95
 const TOP = ((layers.length - 1) * GAP) / 2

@@ -29,7 +29,7 @@
 }
 
 .hi {
-  border-color: rgba(103, 232, 249, 0.35);
+  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
   color: var(--text);
 }
 

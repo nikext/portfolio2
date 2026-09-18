@@ -55,12 +55,12 @@ export function Header() {
         <a className={styles.brand} href="#top" aria-label="Nikola Todorovski, back to top">
           <span className={styles.mark} aria-hidden="true">
             <svg viewBox="0 0 64 64" fill="none">
-              <g stroke="#67e8f9" strokeWidth="3" strokeLinecap="round" opacity="0.9">
+              <g stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" opacity="0.9">
                 <line x1="18" y1="44" x2="32" y2="20" />
                 <line x1="32" y1="20" x2="46" y2="44" />
                 <line x1="18" y1="44" x2="46" y2="44" />
               </g>
-              <g fill="#e0f7ff">
+              <g fill="var(--accent-tint)">
                 <circle cx="18" cy="44" r="6" />
                 <circle cx="32" cy="20" r="6" />
                 <circle cx="46" cy="44" r="6" />

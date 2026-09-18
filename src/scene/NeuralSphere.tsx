@@ -4,10 +4,11 @@ import { useFrame } from '@react-three/fiber'
 import { buildGraph } from './graph'
 import { coreShader, edgeShader, nodeShader } from './shaders'
 import { view } from './state'
+import { cssColor } from './palette'
 
-const ACCENT = '#67e8f9'
+const ACCENT = cssColor('--accent')
 const DEEP = '#3b82f6'
-const VIOLET = '#a78bfa'
+const GLOW = cssColor('--glow')
 const WIRE_OPACITY = 0.14
 const RING_OPACITY = 0.35
 
@@ -75,7 +76,7 @@ export function NeuralSphere({ count, k, mobile, animate }: Props) {
     () => ({
       uTime: { value: 0 },
       uOpacity: { value: 1 },
-      uColor: { value: new THREE.Color(VIOLET) },
+      uColor: { value: new THREE.Color(GLOW) },
     }),
     [],
   )

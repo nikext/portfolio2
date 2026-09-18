@@ -33,7 +33,7 @@
   pointer-events: none;
   background: radial-gradient(
     280px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(103, 232, 249, 0.13),
+    color-mix(in srgb, var(--accent) 13%, transparent),
     transparent 60%
   );
   opacity: 0;
@@ -58,7 +58,7 @@
   text-transform: uppercase;
   color: var(--accent);
   padding: 4px 9px;
-  border: 1px solid rgba(103, 232, 249, 0.3);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 999px;
   background: var(--accent-soft);
 }

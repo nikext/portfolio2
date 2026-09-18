@@ -9,8 +9,16 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(1100px 700px at 78% 0%, rgba(103, 232, 249, 0.1), transparent 62%),
-    radial-gradient(900px 600px at 6% 100%, rgba(167, 139, 250, 0.1), transparent 60%);
+    radial-gradient(
+      1100px 700px at 78% 0%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      900px 600px at 6% 100%,
+      color-mix(in srgb, var(--glow) 10%, transparent),
+      transparent 60%
+    );
 }
 
 .skip {

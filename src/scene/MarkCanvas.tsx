@@ -5,6 +5,7 @@ import { Float, useGLTF } from '@react-three/drei'
 import { useInView } from '../lib/useInView'
 import { useReducedMotion } from '../lib/useReducedMotion'
 import styles from './MarkCanvas.module.css'
+import { cssColor } from './palette'
 
 const MODEL = '/models/mark.glb'
 const { damp } = THREE.MathUtils
@@ -47,7 +48,7 @@ export default function MarkCanvas() {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[2, 3, 4]} intensity={2} />
-        <pointLight position={[-2, -1, 2]} intensity={5} color="#a78bfa" distance={8} />
+        <pointLight position={[-2, -1, 2]} intensity={5} color={cssColor('--glow')} distance={8} />
         <Suspense fallback={null}>
           <Float
             speed={reduced ? 0 : 1.6}
