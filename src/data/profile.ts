@@ -1,16 +1,16 @@
 export const profile = {
   name: 'Nikola Todorovski',
   firstName: 'Nikola',
-  role: 'Software Engineer',
-  focus: 'AI applications & production reliability',
+  role: 'AI & Forward Deployed Engineer',
+  focus: 'LLM applications, agentic systems and forward-deployed delivery',
   location: 'Zurich area, Switzerland',
   availabilityNote: 'Working inside a Swiss digital bank since 2025.',
   tagline:
-    'I build LLM-powered tools and keep production software running, currently inside a Swiss digital bank.',
+    'I build LLM applications and agentic systems, ship them alongside the people who use them, and keep them running in production. Currently inside a Swiss digital bank.',
   intro: [
-    'Software engineer with 5+ years shipping and running production software, the last year inside a Swiss digital bank. I work close to the business: understanding the real problem, prototyping quickly, and iterating with users until the tool is actually used.',
-    'Day to day I work in Python, TypeScript and SQL on Google Cloud, building LLM-based tooling and automation with Anthropic Claude and OpenAI models, and using AI-assisted development tools such as Claude Code, Cursor and Google AI Studio responsibly.',
-    'Google-certified in cloud engineering and generative AI, with a careful engineering mindset: clean code, testing, reliability and responsible data handling in a regulated environment.',
+    'AI engineer with 5+ years shipping and running production software, the last year inside a Swiss digital bank. I work forward-deployed: embedded with the business, understanding the real problem, prototyping in days and iterating with users until the tool is part of how they work.',
+    'Day to day I design and build LLM applications and agentic workflows in Python, TypeScript and SQL on Google Cloud: retrieval over internal data, tool use, structured outputs, evals and guardrails, with Anthropic Claude, OpenAI and Gemini models. I use agentic coding tools such as Claude Code, Codex and Cursor daily, and responsibly.',
+    'Google-certified in cloud engineering and generative AI, with a production mindset: clean architecture, testing, observability, reliability and responsible data handling in a regulated environment.',
   ],
   email: 'nikolatod42@gmail.com',
   links: {
@@ -22,14 +22,14 @@ export const profile = {
     { value: '5+', label: 'years shipping production software' },
     { value: '99.9%', label: 'uptime sustained on fintech applications' },
     { value: '3', label: 'Google Cloud and Google AI certifications' },
-    { value: '20%', label: 'lift in user engagement from redesigned pages' },
+    { value: 'Daily', label: 'agentic coding with Claude Code and Codex' },
   ],
   strengths: [
     'Clear communication with technical and non-technical stakeholders',
     'Asks good questions before building',
-    'Personal ownership of results',
+    'Owns outcomes end to end, from scoping with the business to production support',
+    'Pragmatic about AI: evals, guardrails and responsible data handling before scale',
     'Attention to detail and structured problem-solving',
-    'Proactive, self-motivated, always learning',
     'Genuine interest in financial services, digital assets and secure software in regulated environments',
   ],
   languages: [

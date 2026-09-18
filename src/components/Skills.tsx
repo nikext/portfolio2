@@ -10,7 +10,7 @@ export function Skills() {
       index="04"
       label="Skills"
       title="What I work with."
-      lede="Grouped the way I use them: models and agents first, then the languages, engineering and cloud that get them to production."
+      lede="Grouped the way I use them: models, agents and evals first, then the languages, architecture and cloud that get them to production."
     >
       <div className={styles.grid}>
         {skillGroups.map((g, i) => (

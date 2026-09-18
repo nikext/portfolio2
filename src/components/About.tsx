@@ -57,7 +57,9 @@ export function About() {
               </div>
               <div>
                 <dt>Focus</dt>
-                <dd>LLM tooling, automation and production reliability on Google Cloud</dd>
+                <dd>
+                  LLM applications, agentic workflows and forward-deployed delivery on Google Cloud
+                </dd>
               </div>
               <div>
                 <dt>Languages</dt>
