@@ -1,6 +1,6 @@
 # Agent notes for portfolio2
 
-Personal portfolio of Nikola Todorovski. Vite + React 19 + TypeScript + React Three Fiber (three.js), static output, deployed on Cloudflare Pages. No backend.
+Personal portfolio of Nikola Todorovski. Vite + React 19 + TypeScript + React Three Fiber (three.js), static output, deployed as a Cloudflare Worker with static assets: Workers Builds runs `npx wrangler deploy` on every push to `main`, configured by `wrangler.jsonc` (keep its `name` equal to the Worker's name, `portfolio2`). No backend.
 
 ## Commands
 
@@ -11,6 +11,7 @@ npm run preview        # serve dist/
 npm run check          # typecheck + eslint + prettier --check
 npm run format         # prettier --write
 npm run build:assets   # regenerate public/models/mark.glb
+npx wrangler deploy --dry-run   # validate the Cloudflare deploy: builds, reads dist, uploads nothing
 ```
 
 ## Layout

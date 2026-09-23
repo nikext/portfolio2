@@ -1,6 +1,6 @@
 # Nikola Todorovski — portfolio
 
-Personal portfolio site. Vite + React + TypeScript with three.js rendered through React Three Fiber. Deployed on Cloudflare Pages.
+Personal portfolio site. Vite + React + TypeScript with three.js rendered through React Three Fiber. Deployed on Cloudflare Workers as static assets.
 
 ## Run it
 
@@ -44,19 +44,18 @@ Every 3D canvas is lazy-loaded so three.js arrives after the page content, pause
 
 All of it is off for touch where it needs a mouse, and replaced by the final static state under `prefers-reduced-motion`.
 
-## Deploy to Cloudflare Pages
+## Deploy to Cloudflare
 
-Connect the repo in the Cloudflare dashboard (Workers & Pages → Create → Pages → Connect to Git) with:
+The site deploys as a Cloudflare Worker with static assets through Workers Builds (Workers & Pages → Create → Import a repository). `wrangler.jsonc` holds the deploy config: `npx wrangler deploy` runs `npm run build` and uploads `./dist`.
 
-| Setting                | Value                                                                             |
-| ---------------------- | --------------------------------------------------------------------------------- |
-| Framework preset       | Vite                                                                              |
-| Build command          | `npm run build`                                                                   |
-| Build output directory | `dist`                                                                            |
-| Node version           | `22` (read from `.node-version`)                                                  |
-| Environment variable   | `SITE_URL=https://your-domain.tld` (makes canonical and Open Graph URLs absolute) |
+| Setting        | Value                                                                             |
+| -------------- | --------------------------------------------------------------------------------- |
+| Build command  | empty or `npm run build` (the deploy step builds either way)                      |
+| Deploy command | `npx wrangler deploy`                                                             |
+| Node version   | `22` (read from `.node-version`)                                                  |
+| Build variable | `SITE_URL=https://your-domain.tld` (makes canonical and Open Graph URLs absolute) |
 
-Every push to `main` deploys; other branches get preview URLs. `public/_headers` adds security and cache headers.
+Every push to `main` deploys. The Worker's name in the dashboard must stay `portfolio2`, the `name` in `wrangler.jsonc`. `public/_headers` adds security and cache headers; Workers static assets read it the same way Pages did. To check a deploy without uploading anything, run `npx wrangler deploy --dry-run`.
 
 ## Optional portrait and CV
 
