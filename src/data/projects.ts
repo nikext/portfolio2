@@ -55,7 +55,7 @@ export const projects: Project[] = [
     ],
     stack: ['TanStack Start', 'TypeScript', 'MapLibre GL', 'deck.gl', 'SQLite'],
     links: [
-      { label: 'Live', url: 'https://zuri-sunny-production.up.railway.app' },
+      { label: 'Live', url: 'https://zuri-sunny-286937397059.europe-west6.run.app' },
       { label: 'Code', url: 'https://github.com/nikext/zuri-sunny' },
     ],
     featured: true,
