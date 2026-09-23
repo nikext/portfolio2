@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { skillGroups } from '../data/skills'
 import { Reveal } from './Reveal'
 import { Section } from './Section'
@@ -19,8 +20,12 @@ export function Skills() {
               <h3>{g.title}</h3>
               <p className={styles.blurb}>{g.blurb}</p>
               <ul className={styles.list}>
-                {g.items.map((item) => (
-                  <li key={item} className={`chip ${g.id === 'ai' ? styles.hi : ''}`}>
+                {g.items.map((item, c) => (
+                  <li
+                    key={item}
+                    className={`chip ${g.id === 'ai' ? styles.hi : ''}`}
+                    style={{ '--c': c } as CSSProperties}
+                  >
                     {item}
                   </li>
                 ))}

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { profile } from '../data/profile'
+import { useMagnetic } from '../lib/useMagnetic'
 import styles from './Header.module.css'
 
 const NAV = [
@@ -15,12 +16,32 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
+  const nav = useRef<HTMLElement>(null)
+  const pill = useRef<HTMLSpanElement>(null)
+  const progress = useRef<HTMLSpanElement>(null)
+  const cta = useMagnetic<HTMLAnchorElement>()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
+    let raf = 0
+    const update = () => {
+      raf = 0
+      setScrolled(window.scrollY > 24)
+      const max = document.documentElement.scrollHeight - window.innerHeight
+      const p = max > 0 ? Math.min(1, window.scrollY / max) : 0
+      if (progress.current) progress.current.style.transform = `scaleX(${p.toFixed(4)})`
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   useEffect(() => {
@@ -46,6 +67,41 @@ export function Header() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
+
+  // A pill slides under the hovered or focused link, and rests under the active section's link.
+  const target = hovered ?? active
+  useLayoutEffect(() => {
+    const n = nav.current
+    const p = pill.current
+    if (!n || !p) return
+    const place = () => {
+      const link = target ? n.querySelector<HTMLElement>(`a[href="#${target}"]`) : null
+      if (!link) {
+        p.style.opacity = '0'
+        return
+      }
+      // Appearing from hidden: jump into place instead of sliding in from the left.
+      const appearing = p.style.opacity !== '1'
+      if (appearing) p.style.transitionProperty = 'opacity'
+      p.style.width = `${link.offsetWidth}px`
+      p.style.height = `${link.offsetHeight}px`
+      p.style.transform = `translate(${link.offsetLeft}px, ${link.offsetTop}px)`
+      p.style.opacity = '1'
+      if (appearing) {
+        void p.offsetWidth
+        p.style.transitionProperty = ''
+      }
+    }
+    place()
+    // Link widths change once the web font arrives.
+    let live = true
+    document.fonts?.ready.then(() => live && place())
+    window.addEventListener('resize', place)
+    return () => {
+      live = false
+      window.removeEventListener('resize', place)
+    }
+  }, [target])
 
   return (
     <header
@@ -85,10 +141,13 @@ export function Header() {
         </button>
 
         <nav
+          ref={nav}
           id="site-nav"
           className={`${styles.nav} ${open ? styles.open : ''}`}
           aria-label="Sections"
+          onMouseLeave={() => setHovered(null)}
         >
+          <span ref={pill} className={styles.pill} aria-hidden="true" />
           {NAV.map((n) => (
             <a
               key={n.id}
@@ -96,15 +155,23 @@ export function Header() {
               className={active === n.id ? styles.active : undefined}
               aria-current={active === n.id ? 'true' : undefined}
               onClick={() => setOpen(false)}
+              onMouseEnter={() => setHovered(n.id)}
+              onFocus={() => setHovered(n.id)}
+              onBlur={() => setHovered(null)}
             >
               {n.label}
             </a>
           ))}
-          <a className={`btn btn-primary btn-sm ${styles.cta}`} href={`mailto:${profile.email}`}>
+          <a
+            ref={cta}
+            className={`btn btn-primary btn-sm ${styles.cta}`}
+            href={`mailto:${profile.email}`}
+          >
             Email me
           </a>
         </nav>
       </div>
+      <span ref={progress} className={styles.progress} aria-hidden="true" />
     </header>
   )
 }

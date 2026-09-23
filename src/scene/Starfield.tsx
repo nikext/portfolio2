@@ -2,13 +2,20 @@ import { useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { mulberry32 } from './random'
-import { starShader } from './shaders'
+import { starfieldShader } from './shaders'
 import { view } from './state'
 
-/** Sparse, slowly twinkling points far behind the sphere; drifts with scroll for parallax. */
-export function Starfield({ count }: { count: number }) {
+const { damp, smoothstep } = THREE.MathUtils
+
+/**
+ * Sparse, slowly twinkling points far behind the sphere; drifts with scroll for
+ * parallax, stretches into streaks when the page is scrolled fast, and lights
+ * up a little around the mouse.
+ */
+export function Starfield({ count, animate }: { count: number; animate: boolean }) {
   const points = useRef<THREE.Points>(null)
   const mat = useRef<THREE.ShaderMaterial>(null)
+  const drift = useRef({ x: 0, y: 0 })
 
   const geo = useMemo(() => {
     const rand = mulberry32(3)
@@ -36,26 +43,43 @@ export function Starfield({ count }: { count: number }) {
       uPixelRatio: { value: 1 },
       uOpacity: { value: 0.7 },
       uColor: { value: new THREE.Color('#bfe9ff') },
+      uStretch: { value: 1 },
+      uPointer: { value: new THREE.Vector2() },
+      uLight: { value: 0 },
+      uAspect: { value: 1 },
     }),
     [],
   )
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const m = mat.current
     const p = points.current
     if (!m || !p) return
-    m.uniforms.uTime.value = state.clock.elapsedTime
+    const dt = Math.min(delta, 0.1)
     m.uniforms.uPixelRatio.value = state.viewport.dpr
-    p.position.y = view.scroll * 6
+    p.position.y = view.scroll * 6 + drift.current.y
     p.rotation.z = view.scroll * 0.15
+    // Reduced motion: no twinkle, streaks, light or drift; only the scroll parallax above.
+    if (!animate) return
+    m.uniforms.uTime.value = state.clock.elapsedTime
+    // Reading-speed scrolling leaves the stars alone; a fast fling turns them into streaks.
+    m.uniforms.uStretch.value = 1 + smoothstep(Math.abs(view.velocity), 0.6, 5) * 8
+    m.uniforms.uPointer.value.set(view.px, view.py)
+    m.uniforms.uLight.value = damp(m.uniforms.uLight.value, view.pointer ? 1 : 0, 4, dt)
+    m.uniforms.uAspect.value = state.size.width / Math.max(1, state.size.height)
+
+    // The field sits far back, so it drifts slightly against the mouse for depth.
+    drift.current.x = damp(drift.current.x, -view.px * 0.35, 2, dt)
+    drift.current.y = damp(drift.current.y, -view.py * 0.2, 2, dt)
+    p.position.x = drift.current.x
   })
 
   return (
     <points ref={points} geometry={geo} frustumCulled={false}>
       <shaderMaterial
         ref={mat}
-        vertexShader={starShader.vertexShader}
-        fragmentShader={starShader.fragmentShader}
+        vertexShader={starfieldShader.vertexShader}
+        fragmentShader={starfieldShader.fragmentShader}
         uniforms={uniforms}
         transparent
         depthWrite={false}

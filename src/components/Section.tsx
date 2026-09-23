@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Reveal } from './Reveal'
+import { Words } from './Words'
 import styles from './Section.module.css'
 
 interface Props {
@@ -21,7 +22,7 @@ export function Section({ id, index, label, title, lede, children }: Props) {
             {label}
           </p>
           <h2 id={`${id}-title`} className={styles.title}>
-            {title}
+            <Words text={title} />
           </h2>
           {lede && <p className={styles.lede}>{lede}</p>}
         </Reveal>

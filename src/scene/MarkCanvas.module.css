@@ -2,6 +2,20 @@
   width: 100%;
   min-width: 0;
   aspect-ratio: 1;
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas,
+  .canvas:active {
+    cursor: auto;
+  }
 }
 
 .canvas canvas {

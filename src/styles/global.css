@@ -137,7 +137,7 @@ button {
   white-space: nowrap;
 }
 
-/* buttons */
+/* buttons; --pull-x / --pull-y come from useMagnetic, --lift from hover */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -151,8 +151,9 @@ button {
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
+  transform: translate(var(--pull-x, 0px), calc(var(--pull-y, 0px) + var(--lift, 0px)));
   transition:
-    transform 0.2s var(--ease-out),
+    transform 0.35s var(--ease-out),
     background-color 0.2s,
     border-color 0.2s,
     color 0.2s;
@@ -170,7 +171,7 @@ button {
 
 .btn-primary:hover {
   background: var(--accent-bright);
-  transform: translateY(-1px);
+  --lift: -1px;
 }
 
 .btn-ghost {
@@ -182,7 +183,7 @@ button {
 .btn-ghost:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-1px);
+  --lift: -1px;
 }
 
 /* scroll reveal */
@@ -198,6 +199,37 @@ button {
 .reveal.in {
   opacity: 1;
   transform: none;
+}
+
+/* word-by-word headings (Words component): inside a .reveal, each word rises
+   out of a blur once the block comes into view, staggered by --w */
+.word {
+  display: inline-block;
+}
+
+.reveal .word {
+  opacity: 0;
+  transform: translateY(0.35em);
+  filter: blur(8px);
+  transition:
+    opacity 0.9s var(--ease-out),
+    transform 0.9s var(--ease-out),
+    filter 0.9s var(--ease-out);
+  transition-delay: calc(var(--delay, 0ms) + 100ms + var(--w, 0) * 45ms);
+}
+
+.reveal.in .word {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* while the hero sphere is being dragged */
+html.sphere-grabbing,
+html.sphere-grabbing * {
+  cursor: grabbing !important;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .sr-only {
@@ -217,13 +249,15 @@ button {
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .reveal,
+  .reveal .word {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
   }
 
   .btn:hover {
-    transform: none;
+    --lift: 0px;
   }
 }

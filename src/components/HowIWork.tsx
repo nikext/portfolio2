@@ -1,6 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 import { layers } from '../data/stack'
 import { Reveal } from './Reveal'
+import { Words } from './Words'
 import styles from './HowIWork.module.css'
 
 const StackDiagram = lazy(() => import('../scene/StackDiagram'))
@@ -15,7 +16,7 @@ export function HowIWork() {
       <Reveal className={styles.head}>
         <p className="eyebrow">How I work</p>
         <h3 className={styles.title}>
-          From the people who use it to the models and infrastructure that run it.
+          <Words text="From the people who use it to the models and infrastructure that run it." />
         </h3>
         <p className={styles.lede}>
           Hover or tap a layer. The pulses are requests travelling down the stack and telemetry

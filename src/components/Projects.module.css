@@ -15,8 +15,8 @@
   flex-direction: column;
   gap: 14px;
   padding: 24px;
-  overflow: hidden;
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
   transition:
     transform 0.35s var(--ease-out),
     border-color 0.3s;
@@ -26,22 +26,70 @@
   border-color: var(--line-strong);
 }
 
-.card::after {
+/* Soft light under the pointer (::after) and a brighter rim where the pointer is
+   nearest the edge (::before, masked down to the 1px border). */
+.card::after,
+.card::before {
   content: '';
   position: absolute;
-  inset: 0;
   pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card::after {
+  inset: 0;
   background: radial-gradient(
     280px circle at var(--mx, 50%) var(--my, 50%),
     color-mix(in srgb, var(--accent) 13%, transparent),
     transparent 60%
   );
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 
-.card:hover::after {
+.card::before {
+  inset: -1px;
+  padding: 1px;
+  background: radial-gradient(
+    200px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 80%, transparent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+
+.card:hover::after,
+.card:hover::before {
   opacity: 1;
+}
+
+/* Depth while tilting: the badge row, title and links lift off the card on
+   separate planes. Body text stays on the card plane so it renders crisp, and at
+   rest nothing is translated in z at all. */
+.top,
+.title,
+.links {
+  transition: transform 0.45s var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card:hover > .top {
+    transform: translateZ(14px);
+  }
+
+  .card:hover > .title {
+    transform: translateZ(26px);
+  }
+
+  .card:hover > .links {
+    transform: translateZ(20px);
+  }
 }
 
 .top {

@@ -81,12 +81,15 @@
 }
 
 .nav {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 2px;
 }
 
+/* Positioned so they paint above the pill. */
 .nav a {
+  position: relative;
   padding: 8px 12px;
   border-radius: 999px;
   font-size: 14px;
@@ -99,7 +102,44 @@
 
 .nav a:hover {
   color: var(--text);
-  background: var(--surface-2);
+}
+
+/* Slides between links; placed by Header.tsx (translate + size of the target link). */
+.pill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.45s var(--ease-out),
+    width 0.45s var(--ease-out),
+    opacity 0.3s;
+}
+
+/* Reading progress along the bottom edge of the header. */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 25%, transparent),
+    var(--accent)
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.scrolled .progress {
+  opacity: 1;
 }
 
 .nav a.active {
@@ -168,6 +208,12 @@
   transform: translateY(-6px) rotate(-45deg);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    transition: opacity 0.3s;
+  }
+}
+
 @media (max-width: 860px) {
   .brandText small {
     display: none;
@@ -199,6 +245,14 @@
     padding: 12px 10px;
     font-size: 16px;
     border-radius: 10px;
+  }
+
+  .nav a:hover {
+    background: var(--surface-2);
+  }
+
+  .pill {
+    display: none;
   }
 
   .nav .cta {

@@ -42,6 +42,28 @@
   margin-top: 28px;
 }
 
+/* Fixed width so swapping the label to "Copied" doesn't reflow the row. */
+.copy {
+  min-width: 9.8em;
+}
+
+.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.copied svg path {
+  stroke-dasharray: 16;
+  stroke-dashoffset: 16;
+  animation: draw 0.45s var(--ease-out) forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 .meta {
   margin-top: 28px;
   display: flex;
@@ -55,5 +77,12 @@
 @media (max-width: 860px) {
   .wrap {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copied svg path {
+    animation: none;
+    stroke-dashoffset: 0;
   }
 }

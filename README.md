@@ -17,21 +17,32 @@ npm run build:assets # regenerate public/models/mark.glb
 
 ## Where things live
 
-| What                                                                  | Where                                                                                     |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Name, links, intro, facts, certifications, education, languages       | `src/data/profile.ts`                                                                     |
-| Roles / experience                                                    | `src/data/experience.ts`                                                                  |
-| Projects                                                              | `src/data/projects.ts`                                                                    |
-| Skill groups                                                          | `src/data/skills.ts`                                                                      |
-| "How I work" layers (the 3D stack diagram)                            | `src/data/stack.ts`                                                                       |
-| Full-page background: neural sphere, starfield, shaders, scroll state | `src/scene/Background.tsx`, `NeuralSphere.tsx`, `Starfield.tsx`, `shaders.ts`, `state.ts` |
-| Interactive stack diagram (About section)                             | `src/scene/StackDiagram.tsx`                                                              |
-| Floating brand mark loaded from a GLB (Contact section)               | `src/scene/MarkCanvas.tsx`, `public/models/mark.glb`                                      |
-| Page sections                                                         | `src/components/`                                                                         |
-| Colours, type, spacing tokens, buttons, chips                         | `src/styles/global.css`                                                                   |
-| GLB asset generator and Open Graph image template                     | `scripts/`                                                                                |
+| What                                                                 | Where                                                                                     |
+| -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Name, links, hero headline, intro, facts, certifications, languages  | `src/data/profile.ts`                                                                     |
+| Roles / experience                                                   | `src/data/experience.ts`                                                                  |
+| Projects                                                             | `src/data/projects.ts`                                                                    |
+| Skill groups                                                         | `src/data/skills.ts`                                                                      |
+| "How I work" layers (the 3D stack diagram)                           | `src/data/stack.ts`                                                                       |
+| Full-page background: neural sphere, starfield, shaders, input state | `src/scene/Background.tsx`, `NeuralSphere.tsx`, `Starfield.tsx`, `shaders.ts`, `state.ts` |
+| Interactive stack diagram (About section)                            | `src/scene/StackDiagram.tsx`                                                              |
+| Floating brand mark loaded from a GLB (Contact section)              | `src/scene/MarkCanvas.tsx`, `public/models/mark.glb`                                      |
+| Page sections                                                        | `src/components/`                                                                         |
+| Colours, type, spacing tokens, buttons, chips                        | `src/styles/global.css`                                                                   |
+| GLB asset generator and Open Graph image template                    | `scripts/`                                                                                |
 
 Every 3D canvas is lazy-loaded so three.js arrives after the page content, pauses when it scrolls out of view, and renders a still frame for visitors who prefer reduced motion. If WebGL is unavailable the page simply shows without the 3D layer.
+
+## Interactions
+
+- Hero sphere: nodes bulge away from the mouse, dragging the empty right column spins it, and a click near it fires a signal that spreads through the graph hop by hop (a breadth-first search over its edges). It also fires signals by itself while idle, and once when you reach Contact.
+- Starfield: stars stretch into streaks when the page is scrolled fast and brighten around the mouse.
+- Type: headings reveal word by word; the champagne headline words carry a sheen and a light that follows the mouse; the hero stats count up.
+- Scroll: a signal runs down the Experience timeline and lights each role, the "How I work" stack spreads into an exploded view, and the header shows reading progress with a pill that slides between links.
+- Cards and buttons: project cards tilt with layered depth and a rim light; primary buttons lean toward the mouse.
+- Contact: drag the 3D mark to spin it, click it to ping (which also fires a signal through the sphere behind the card), and copy the email address with one click.
+
+All of it is off for touch where it needs a mouse, and replaced by the final static state under `prefers-reduced-motion`.
 
 ## Deploy to Cloudflare Pages
 

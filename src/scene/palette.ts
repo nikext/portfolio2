@@ -6,6 +6,7 @@
  */
 const FALLBACK = {
   '--accent': '#e8d5a6',
+  '--accent-tint': '#fbf5e6',
   '--glow': '#7c93e8',
 } as const
 

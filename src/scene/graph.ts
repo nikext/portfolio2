@@ -1,10 +1,16 @@
 import * as THREE from 'three'
 import { mulberry32 } from './random'
 
+/** Wave slots in the shaders (`aHop` / `uWaveStart` are vec4s): up to four signals in flight. */
+export const WAVE_SLOTS = 4
+/** Hop distance used for "not reached (yet)"; far beyond any real path length. */
+export const UNREACHED = 1e4
+
 /**
  * Builds the "neural sphere": nodes spread on a jittered Fibonacci sphere,
  * connected to their k nearest neighbours. Every node also gets a random
- * far-away start position so the graph can assemble itself on load.
+ * far-away start position so the graph can assemble itself on load, and a
+ * per-slot hop distance (`aHop`) that signal waves are drawn from.
  */
 export function buildGraph(count: number, k: number, radius = 2.1, seed = 11) {
   const rand = mulberry32(seed)
@@ -58,6 +64,15 @@ export function buildGraph(count: number, k: number, radius = 2.1, seed = 11) {
     }
   }
 
+  const neighbours: number[][] = Array.from({ length: count }, () => [])
+  const ends = new Uint16Array(pairs.length * 2)
+  pairs.forEach(([a, b], n) => {
+    neighbours[a].push(b)
+    neighbours[b].push(a)
+    ends[n * 2] = a
+    ends[n * 2 + 1] = b
+  })
+
   const ePos = new Float32Array(pairs.length * 6)
   const eStart = new Float32Array(pairs.length * 6)
   const eNodePhase = new Float32Array(pairs.length * 2)
@@ -89,6 +104,10 @@ export function buildGraph(count: number, k: number, radius = 2.1, seed = 11) {
   nodeGeo.setAttribute('aStart', new THREE.BufferAttribute(start, 3))
   nodeGeo.setAttribute('aSize', new THREE.BufferAttribute(size, 1))
   nodeGeo.setAttribute('aPhase', new THREE.BufferAttribute(phase, 1))
+  nodeGeo.setAttribute(
+    'aHop',
+    new THREE.BufferAttribute(new Float32Array(count * WAVE_SLOTS).fill(UNREACHED), WAVE_SLOTS),
+  )
 
   const edgeGeo = new THREE.BufferGeometry()
   edgeGeo.setAttribute('position', new THREE.BufferAttribute(ePos, 3))
@@ -98,6 +117,53 @@ export function buildGraph(count: number, k: number, radius = 2.1, seed = 11) {
   edgeGeo.setAttribute('aPhase', new THREE.BufferAttribute(ePhase, 1))
   edgeGeo.setAttribute('aSpeed', new THREE.BufferAttribute(eSpeed, 1))
   edgeGeo.setAttribute('aActive', new THREE.BufferAttribute(eActive, 1))
+  edgeGeo.setAttribute(
+    'aHop',
+    new THREE.BufferAttribute(
+      new Float32Array(pairs.length * 2 * WAVE_SLOTS).fill(UNREACHED),
+      WAVE_SLOTS,
+    ),
+  )
 
-  return { nodeGeo, edgeGeo, edgeCount: pairs.length }
+  return { nodeGeo, edgeGeo, edgeCount: pairs.length, positions: pos, neighbours, ends }
+}
+
+export type Graph = ReturnType<typeof buildGraph>
+
+/**
+ * Breadth-first hop count from `origin` to every node, written into `out`.
+ * Nodes in other components of the graph keep UNREACHED.
+ */
+export function hopsFrom(neighbours: number[][], origin: number, out: Float32Array) {
+  out.fill(UNREACHED)
+  out[origin] = 0
+  const queue = [origin]
+  for (let head = 0; head < queue.length; head++) {
+    const n = queue[head]
+    for (const m of neighbours[n]) {
+      if (out[m] !== UNREACHED) continue
+      out[m] = out[n] + 1
+      queue.push(m)
+    }
+  }
+}
+
+/**
+ * Starts a signal wave from `origin` in wave slot `slot`: stores every node's hop
+ * distance in that slot of `aHop` (nodes, and both ends of every edge) so the
+ * shaders can light the network hop by hop.
+ */
+export function writeWave(graph: Graph, origin: number, slot: number, scratch: Float32Array) {
+  hopsFrom(graph.neighbours, origin, scratch)
+  const nodeHop = graph.nodeGeo.getAttribute('aHop') as THREE.BufferAttribute
+  const edgeHop = graph.edgeGeo.getAttribute('aHop') as THREE.BufferAttribute
+  const nodes = nodeHop.array as Float32Array
+  const edges = edgeHop.array as Float32Array
+  for (let i = 0; i < scratch.length; i++) nodes[i * WAVE_SLOTS + slot] = scratch[i]
+  for (let e = 0; e < graph.edgeCount; e++) {
+    edges[e * 2 * WAVE_SLOTS + slot] = scratch[graph.ends[e * 2]]
+    edges[(e * 2 + 1) * WAVE_SLOTS + slot] = scratch[graph.ends[e * 2 + 1]]
+  }
+  nodeHop.needsUpdate = true
+  edgeHop.needsUpdate = true
 }

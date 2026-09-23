@@ -5,6 +5,8 @@ export const profile = {
   focus: 'LLM applications, agentic systems and forward-deployed delivery',
   location: 'Zurich area, Switzerland',
   availabilityNote: 'Working inside a Swiss digital bank since 2025.',
+  /** Hero headline, one entry per line; *asterisks* mark the champagne accent words. */
+  headline: ['AI applications that *ship*.', 'Production that *stays up*.'],
   tagline:
     'I build LLM applications and agentic systems, ship them alongside the people who use them, and keep them running in production. Currently inside a Swiss digital bank.',
   intro: [
