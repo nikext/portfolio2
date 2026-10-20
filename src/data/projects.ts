@@ -42,6 +42,22 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: 'swiss-admin-navigator',
+    title: 'Swiss Admin Navigator',
+    kind: 'Open source',
+    year: '2026',
+    summary:
+      'Multilingual agent over 23 Swiss federal acts: answers everyday questions on permits, work, rent and social insurance, citing the exact article with a quote checked against the law.',
+    details: [
+      'ADK agent on Gemini Enterprise Agent Platform (Agent Runtime, Memory Bank, Model Armor) with a public MCP server over Fedlex law in DE, FR, IT and EN.',
+      'Evals on a 150-case golden set with paired CIs and two judge families: 0 hallucinated citations, 99.6% verbatim quotes, CHF 0.039 per answer.',
+      'Benchmarked multi-agent vs single agent and seven models, incl. Apertus self-hosted on a Cloud Run GPU; eval-gated CI with GitHub Actions and WIF.',
+    ],
+    stack: ['Python', 'Google ADK', 'MCP', 'Gemini', 'Agent Runtime', 'Next.js'],
+    links: [{ label: 'Code', url: 'https://github.com/nikext/swiss-admin-navigator' }],
+    featured: true,
+  },
+  {
     id: 'zuri-sunny',
     title: 'Zürich Sunny Spots',
     kind: 'Open source',
