@@ -1,7 +1,7 @@
 export interface Project {
   id: string
   title: string
-  kind: 'Client work' | 'At work' | 'iOS app' | 'Open source' | 'University'
+  kind: 'Client work' | 'At work' | 'iOS app' | 'Open source' | 'Side project' | 'University'
   year: string
   summary: string
   details: string[]
@@ -55,6 +55,25 @@ export const projects: Project[] = [
     ],
     stack: ['Python', 'Google ADK', 'MCP', 'Gemini', 'Agent Runtime', 'Next.js'],
     links: [{ label: 'Code', url: 'https://github.com/nikext/swiss-admin-navigator' }],
+    featured: true,
+  },
+  {
+    id: 'content-orchestrator',
+    title: 'Content Orchestrator',
+    kind: 'Side project',
+    year: '2026',
+    summary:
+      'Unattended SEO blog engine for three of my app sites, including Pollenly and CharmIQ: picks a topic, writes and checks the post, and publishes it to the site’s repo.',
+    details: [
+      'LLM pipeline from topic to outline, draft and self-QA with one revise on Gemini 3, behind a provider interface with a Claude adapter; a zod frontmatter schema and deterministic on-page checks block a bad post.',
+      'Embedding dedup against each site’s ledger with calibrated cosine thresholds, plus per-post and daily USD ceilings: 40 posts published at about USD 0.05 each.',
+      'Hourly GitHub Actions cron with a kill switch and volume gates, build test before push, one commit per post through a GitHub App, then a Cloudflare deploy and an IndexNow ping.',
+    ],
+    stack: ['TypeScript', 'Gemini', 'Claude API', 'Embeddings', 'GitHub Actions', 'Cloudflare'],
+    links: [
+      { label: 'Pollenly blog', url: 'https://pollenly.app/blog/' },
+      { label: 'CharmIQ blog', url: 'https://charmiq.app/blog/' },
+    ],
     featured: true,
   },
   {
