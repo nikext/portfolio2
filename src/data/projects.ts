@@ -58,6 +58,26 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: 'knight-school',
+    title: 'Knight School',
+    kind: 'Open source',
+    year: '2026',
+    summary:
+      'Trained a 2B open LLM to solve chess puzzles with SFT and GRPO, testing whether a teacher-free “chess primer” lifts the plateau that RL alone hits.',
+    details: [
+      'Qwen3.5-2B with TRL + vLLM (LoRA GRPO, full-FT SFT) on spot A100s; a primer built only from python-chess and Stockfish data took held-out solve rate from 4.1% to 35.7%, against a 26–28% plateau for RL from the base model.',
+      'Pre-registered predictions and paired bootstrap CIs on 2,000 Lichess puzzles: primer → RL beat RL alone by +7.4 points [+5.8, +9.2], RL added nothing on top of the primer, and a rules-only primer added nothing either.',
+      '18 training runs for USD 198 of USD 600 in credits, behind a self-built budget gate: ledger, worst-case pre-flight checks and a billing kill switch. Models, data and a React puzzle browser are public.',
+    ],
+    stack: ['Python', 'PyTorch', 'TRL', 'vLLM', 'GRPO', 'Google Cloud'],
+    links: [
+      { label: 'Code', url: 'https://github.com/nikext/knight-school' },
+      { label: 'Puzzle browser', url: 'https://nikext.github.io/knight-school/' },
+      { label: 'Models', url: 'https://huggingface.co/nikext' },
+    ],
+    featured: true,
+  },
+  {
     id: 'content-orchestrator',
     title: 'Content Orchestrator',
     kind: 'Side project',
